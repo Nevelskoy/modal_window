@@ -63,17 +63,27 @@ const priceModal = $.modal({
 });
 
 document.addEventListener('click', (event) => {
+  event.preventDefault();
   const btnType = event.target.dataset.btn;
   const id = +event.target.dataset.id;
+  const doll = dolls.find((f) => f.id === id);
 
   if (btnType === 'price') {
-    const doll = dolls.find((f) => f.id === id);
-
     priceModal.setContent(`
-    <p>Цена на ${doll.title}: <strong>${doll.price}$</strong></p>`);
-
+      <p>Цена на ${doll.title}: <strong>${doll.price}$</strong></p>
+    `);
     priceModal.open();
-
-    console.log(id, doll);
+  }
+  if (btnType === 'remove') {
+    $.confirm({
+      title: 'Вы уверены?',
+      content: `<p>Вы удаляете игрушку: <strong>${doll.title}</strong></p>`,
+    })
+      .then(() => {
+        console.log('Remove');
+      })
+      .catch(() => {
+        console.log('Cancel');
+      });
   }
 });
